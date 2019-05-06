@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Angular</title>
+        <script type="text/javascript" src="js/angular.js">
+        </script>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/materialize.min.css">
+        <script type="text/javascript" src="js/materialize.min.js"></script>
+    </head>
+    <style >
+    .invalid {
+    color:red;
+}
+    </style>
+<body>
+  <nav>
+   <div class="nav-wrapper">
+
+     <ul id="nav-mobile" class="right hide-on-med-and-down">
+       <a href="#" class="brand-logo center">Angular JS</a>
+       <li><a href="angularcontentadd.html">Add content</a></li>
+       <li><a href="angularcontentshow.html">Show content</a></li>
+
+     </ul>
+   </div>
+ </nav>
+  <div class="row">
+
+        <div class="container" ng-app="contentStoring" ng-controller="addContent">
+            <!-- <div class="col s3"></div> -->
+            <div class="col s4">
+            <h2>Add Content</h2>
+
+                <div class="Adding">
+            <form name="contentSystem" novaidate>
+
+                    <p>Enter the heading<input type="text" id="heading" name="myHeading" ng-model="myHeading"  required ng-minlength="5"></p>
+                    <p class="invalid" ng-if="contentSystem.myHeading.$invalid && contentSystem.myHeading.$touched">Enter More than 5 characters</p>
+                    <p>Enter the Author Name</p>
+                    <input type="text" name="myAuthor" id="author" ng-model="myAuthor"   required if-Text>
+                    <p class="invalid" ng-if="contentSystem.myAuthor.$invalid && contentSystem.myAuthor.$touched">Enter only characters</p>
+                    <p>Enter the content</p><textarea id="content" class="materialize-textarea" name="myContent" ng-model="myContent"  required></textarea>
+                    <p class="invalid" ng-if="contentSystem.myContent.$invalid && contentSystem.myContent.$touched">Please enter some content</p>
+                    <button class="btn waves-effect waves-light" ng-show="contentSystem.$valid" onClick="submitData()" type="submit" name="action">Submit
+                    </button>
+                  </div>
+                </div>
+                <div class="col s4 offset-s4">
+                     <div class="pagePreview" >
+                    <h2>Page Preview</h2>
+                    <div class="divider"></div>
+                    <h4>{{myHeading}}</h4>
+                    <sub>By {{myAuthor}}</sub>
+                    <p class="flow-text">{{myContent}}</p>
+
+                    </div>
+
+                </form>
+                </div>
+                <div id="resultLocal"></div>
+              </div>
+            <script type="text/javascript">
+            var app=angular.module("contentStoring",[]);
+
+            app.controller('addContent',function($scope)
+                          {
+
+                          $scope.myHeading="";
+                          $scope.myAuthor="";
+                          $scope.myContent="";
+
+                           
+                          //            console.log($scope.    messageDump);
+                          });
+            //Check if only char
+            app.directive('ifText', function() {
+         return {
+        require: 'ngModel',
+        link: function(scope, element, attr, mCtrl) {
+            function myValidation(value) {
+                if (/^[a-zA-Z ]*$/g.test(value)) {
+                    mCtrl.$setValidity('isChar', true);
+                } else {
+                    mCtrl.$setValidity('isChar', false);
+                }
+                return value;
+            }
+            mCtrl.$parsers.push(myValidation);
+                    }
+                };
+            });
+
+            function submitData()
+            {
+                var heading=document.getElementById("heading").value;
+                var author=document.getElementById("author").value;
+                var content=document.getElementById("content").value;
+
+                var formData=new FormData();
+                formData.append('heading',heading);
+                formData.append('author',author);
+                formData.append('content',content);
+                //  for (var pair of formData.entries()) {
+                //  console.log(pair[0]+ ', ' + pair[1]);
+                //}
+                $.ajax({
+                    type: "POST",
+                    url: "insert_data_ajax.php",
+                    processData: false,
+                    contentType: false,
+                    data:formData,
+                    success:function(result)
+                    {
+                    if(result=='Success')
+                    {
+                        alert("Sucesfully logged in");
+                        window.location.replace("http://localhost/");
+                        
+                    }
+                    else {
+                        alert("Username or password does not exist");
+                
+                        // document.getElementById("resultLocal").innerHTML = localStorage.getItem("local");
+                    }
+            }
+                });
+                }
+            </script>
+
+            </div>
+        </div>
+      </div>
+</body>
+</html>
