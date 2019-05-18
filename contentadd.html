@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Angular</title>
+    <title>NOSQL</title>
         <script type="text/javascript" src="js/angular.js">
         </script>
         <script type="text/javascript" src="js/jquery.js"></script>
@@ -18,9 +18,9 @@
    <div class="nav-wrapper">
 
      <ul id="nav-mobile" class="right hide-on-med-and-down">
-       <a href="#" class="brand-logo center">Angular JS</a>
-       <li><a href="angularcontentadd.html">Add content</a></li>
-       <li><a href="angularcontentshow.html">Show content</a></li>
+       <a href="#" class="brand-logo center">NOSQL</a>
+       <li><a href="contentadd.html">Add content</a></li>
+       <li><a href="contentshow.php">Show content</a></li>
 
      </ul>
    </div>
@@ -42,18 +42,21 @@
                     <p class="invalid" ng-if="contentSystem.myAuthor.$invalid && contentSystem.myAuthor.$touched">Enter only characters</p>
                     <p>Enter the content</p><textarea id="content" class="materialize-textarea" name="myContent" ng-model="myContent"  required></textarea>
                     <p class="invalid" ng-if="contentSystem.myContent.$invalid && contentSystem.myContent.$touched">Please enter some content</p>
+
+                    <p>Enter the background color </p><input type="text" id="color" ng-model="myCol">
                     <button class="btn waves-effect waves-light" ng-show="contentSystem.$valid" onClick="submitData()" type="submit" name="action">Submit
                     </button>
                   </div>
                 </div>
                 <div class="col s4 offset-s4">
                      <div class="pagePreview" >
-                    <h2>Page Preview</h2>
-                    <div class="divider"></div>
-                    <h4>{{myHeading}}</h4>
-                    <sub>By {{myAuthor}}</sub>
-                    <p class="flow-text">{{myContent}}</p>
-
+                         <h2>Page Preview</h2>
+                         <div class="divider"></div>
+                         <div class="{{myCol}}" style="padding:15px;">
+                         <h4>{{myHeading}}</h4>
+                         <sub>By {{myAuthor}}</sub>
+                         <p class="flow-text">{{myContent}}</p>
+                       </div>
                     </div>
 
                 </form>
@@ -69,8 +72,6 @@
                           $scope.myHeading="";
                           $scope.myAuthor="";
                           $scope.myContent="";
-
-                           
                           //            console.log($scope.    messageDump);
                           });
             //Check if only char
@@ -96,11 +97,15 @@
                 var heading=document.getElementById("heading").value;
                 var author=document.getElementById("author").value;
                 var content=document.getElementById("content").value;
-
+                var color=document.getElementById("color").value;
                 var formData=new FormData();
                 formData.append('heading',heading);
                 formData.append('author',author);
                 formData.append('content',content);
+                if(color)
+                {
+                  formData.append('color',color);
+                }
                 //  for (var pair of formData.entries()) {
                 //  console.log(pair[0]+ ', ' + pair[1]);
                 //}
@@ -114,18 +119,21 @@
                     {
                     if(result=='Success')
                     {
-                        alert("Sucesfully logged in");
-                        window.location.replace("http://localhost/");
-                        
+                        alert("Sucesfully Added");
+                        window.location.replace("http://localhost/NOSQL/contentadd.html");
+
                     }
                     else {
-                        alert("Username or password does not exist");
-                
-                        // document.getElementById("resultLocal").innerHTML = localStorage.getItem("local");
+                        alert("Content has not been updated");
+
+
                     }
             }
                 });
                 }
+                $(document).ready(function() {
+                  $('select').material_select();
+                });
             </script>
 
             </div>
